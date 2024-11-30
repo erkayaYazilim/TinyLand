@@ -18,7 +18,7 @@ body {
     background-size: cover;
     background-position: center;
     position: relative;
-    height: 100vh; /* Ekranın tamamını kaplar */
+    height: 95vh; /* Ekranın tamamını kaplar */
     display: flex;
     flex-direction: column;
     align-items: center;
