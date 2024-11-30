@@ -79,30 +79,36 @@ async function fetchMenuItems() {
         const productsDataRaw = productSnapshot.val() || {};
 
         // Kategorileri işle
-        for (let categoryId in categoryData) {
-            const categoryInfo = categoryData[categoryId];
-            if (categoryInfo) {
-                categoriesData[categoryId] = {
-                    ...categoryInfo,
-                    id: categoryId
-                };
-            }
-        }
+// Kategorileri işle
+for (let categoryId in categoryData) {
+    const categoryInfo = categoryData[categoryId];
+    // Askıya alınmış kategorileri kontrol et
+    if (categoryInfo && categoryInfo.status !== 'inactive') {
+        categoriesData[categoryId] = {
+            ...categoryInfo,
+            id: categoryId
+        };
+    }
+}
+
 
         // Ürünleri işle
-        for (let productId in productsDataRaw) {
-            const product = productsDataRaw[productId];
-            if (product && product.categoryId) {
-                const categoryId = product.categoryId;
-                if (!productsData[categoryId]) {
-                    productsData[categoryId] = [];
-                }
-                productsData[categoryId].push({
-                    ...product,
-                    id: productId
-                });
-            }
+// Ürünleri işle
+for (let productId in productsDataRaw) {
+    const product = productsDataRaw[productId];
+    // Ürünün kategorisi aktif mi kontrol et
+    if (product && product.categoryId && categoriesData[product.categoryId]) {
+        const categoryId = product.categoryId;
+        if (!productsData[categoryId]) {
+            productsData[categoryId] = [];
         }
+        productsData[categoryId].push({
+            ...product,
+            id: productId
+        });
+    }
+}
+
 
         // Kategorileri 'order' değerine göre sırala
         const sortedCategories = Object.values(categoriesData).sort((a, b) => {
